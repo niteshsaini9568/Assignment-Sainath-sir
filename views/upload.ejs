@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded JSON Data</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <form method="post" action="/" enctype="multipart/form-data" class="form1">
+        <input type="file" accept=".json" name="file" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <% if (data && data.length> 0) { %>
+        <h2>Uploaded JSON Data:</h2>
+        <% data.forEach(product=> { %>
+            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                <h3>
+                    <%= product['Product Name'] %>
+                </h3>
+                <% if (Array.isArray(product['Product Image URL'])) { %>
+                    <% product['Product Image URL'].forEach(imageUrl=> { %>
+                        <img src="<%- product['Product Image URL'] %>" alt="<%- product['Product Name'] %>"
+                            style="max-width: 200px; margin-right: 10px;">
+                        <% }); %>
+                            <% } else { %>
+                                <img src="<%- product['Product Image URL'] %>" alt="<%- product['Product Name'] %>"
+                                    style="max-width: 200px;">
+                                <% } %>
+                                    <p><strong>Brand:</strong>
+                                        <%= product.Brand %>
+                                    </p>
+                                    <p><strong>Category:</strong>
+                                        <%= product.Category %>
+                                    </p>
+                                    <p><strong>Product Barcode:</strong>
+                                        <%= product['Product Barcode'] %>
+                                    </p>
+                                    <p><strong>Price (M.R.P.):</strong> $<%= product['Price (M.R.P.)'] %>
+                                    </p>
+                                    <p><strong>Weight/Volume:</strong>
+                                        <%= product['Weight/Volume'] %>
+                                            <%= product.Unit %>
+                                    </p>
+                                    <p><strong>Description:</strong>
+                                        <%= product['Product Description'] %>
+                                    </p>
+                                    <p><strong>Product URL:</strong> <a href="<%- product['Product URL'] %>"
+                                            target="_blank"><%- product['Product URL'] %></a></p>
+                                    <p><strong>Expiry:</strong>
+                                        <%= product['Product Expiry'] %>
+                                    </p>
+            </div>
+            <% }); %>
+                <form method="post" action="/return" class="form2">
+                    <input type="hidden" name="jsonData" value='<%- JSON.stringify(data) %>'>
+                    <button type="submit">Return JSON Data</button>
+                </form>
+                <% } %>
+</body>
+
+</html>
